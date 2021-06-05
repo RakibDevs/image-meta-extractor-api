@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 use Image;
 
 class ImageController extends Controller
 {
+
+    public $imageRepository;
+
+    public function __construct(ImageRepository $imageRepository)
+    {
+        $this->imageRepository = $imageRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +36,8 @@ class ImageController extends Controller
         //
     }
 
+    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -36,8 +46,8 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('image');
-        $exif = Image::make($file)->exif();
+        $exif = ($this->imageRepository->store($request->file('image')));
+        
 
         return response()->json($exif);
     }
