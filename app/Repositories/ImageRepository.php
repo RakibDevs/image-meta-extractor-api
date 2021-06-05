@@ -18,6 +18,12 @@ class ImageRepository extends ExifRepository
     } 
 
 
+    public function get($request)
+    {
+        return $this->image->with('meta')->paginate(10);
+    }
+
+
 
     public function store($file, $type = null)
     {
@@ -75,6 +81,12 @@ class ImageRepository extends ExifRepository
             return $e->getMessage();
 
         }
+    }
+
+
+    public function find($id)
+    {
+        return $this->image->with('meta')->find($id);
     }
 
     

@@ -21,12 +21,11 @@ class ImageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-
-        $exif = ($this->imageRepository->store('https://www.exiv2.org/include/img_1771.jpg','url'));
-        dd($exif);
+        return response()->json(
+            $this->imageRepository->get($request)
+        );
     }
 
 
@@ -38,9 +37,10 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        $exif = ($this->imageRepository->store($request->file('image')));
 
-        return response()->json($exif);
+        return response()->json(
+            $this->imageRepository->store($request->file('image'))
+        );
     }
 
 
@@ -52,9 +52,9 @@ class ImageController extends Controller
      */
     public function url(Request $request)
     {
-        $exif = ($this->imageRepository->store($request->url,'url'));
-
-        return response()->json($exif);
+        return response()->json(
+            $this->imageRepository->store($request->url,'url')
+        );
     }
 
     /**
@@ -65,7 +65,9 @@ class ImageController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(
+            $this->imageRepository->find($id)
+        );
     }
 
   
