@@ -42,7 +42,7 @@ class Image extends Model
      */
     public function meta()
     {
-        return $this->hasOne(ImageMeta::class);
+        return $this->hasOne(ImageMeta::class,'image_id','id');
     }
 
 

@@ -1,70 +1,115 @@
 <?php
 
 namespace App\Repositories;
+use App\Models\Image;
+use App\Repositories\ExifRepository;
 use Illuminate\Support\Facades\Storage;
-use Image;
+use Image as InterventionImage;
 
-class ImageRepository
+class ImageRepository extends ExifRepository
 {
-    public function __constuct()
+
+    protected $image;
+
+
+    public function __construct(Image $image)
     {
-        
-    }
+        $this->image = $image;
+    } 
 
-    public static function convert_from_latin1_to_utf8_recursively($dat)
+
+
+    public function store($file, $type = null)
     {
-        if (is_string($dat)) {
-            return utf8_encode($dat);
-        } elseif (is_array($dat)) {
-            $ret = [];
-            foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
+        try{
 
-            return $ret;
-        } elseif (is_object($dat)) {
-            foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
+            $img  = InterventionImage::make($file);
 
-            return $dat;
-        } else {
-            return $dat;
+            if($type == 'url'){
+                // get directory with file name from url
+                $this->image->src   = $this->imagePath($this->getExtension($file));
+                // Extract exif information from url
+                $this->exif  = exif_read_data($file);
+
+
+
+            }else{
+
+                $this->image->src   = $this->imagePath($file->getClientOriginalExtension());
+                // Extract exif information from fille
+                $this->exif =  $img->exif();
+            }
+            // store image to directory
+            Storage::put($this->image->src, $img->encode());
+
+
+            
+
+            // store image information
+            $this->image->height     = $img->height();
+            $this->image->width      = $img->width();
+            $this->image->mime_type  = $img->mime();
+            $this->image->save();
+
+
+            if($this->exif){
+                if($this->exif['SectionsFound'] != ""){
+
+                    // process meta data
+                    $this->processMeta();
+
+                    // store image meta
+                    $this->image->meta()->create([
+                        'camera' => json_encode($this->camera),
+                        'author' => json_encode($this->author),
+                        'exif'   => json_encode($this->exifMeta)
+                    ]);
+                }
+
+            }
+
+            //return $this->image;
+            return $this->image->with('meta')->find($this->image->id);
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+
         }
     }
 
-    public function store($file)
+    
+
+
+
+    public function processMeta()
     {
-
-        $directory   = $this->imagePath($file->getClientOriginalExtension());
-        $image  = Image::make($file);
-        Storage::put($directory, $image->encode());
-        //$exif = $image->exif();
-        $exif = $image->exif();
-
-        $exif = $this->convert_from_latin1_to_utf8_recursively($exif);
-
-        return $exif;
-
+        $this->exif = (object)$this->encodeExifToUtf8($this->exif);
+        $this->extractInformation();
+        
     }
 
-    public function storeViaUrl($url)
-    {
-        // get directory with file name from url
-        $directory   = $this->imagePath($this->getExtension($url));
-        $image  = Image::make($url);
-        Storage::put($directory, $image->encode());
-        // Extract exif information from url
-        $exif = exif_read_data($url);
-        $exif = $this->convert_from_latin1_to_utf8_recursively($exif);
 
-        return $exif;     
-    }
-
+    /**
+     * return image directory with file name to store image file
+     * 
+     * @return  images/current-month/unique-id.extension
+     */
 
     public function imagePath($extension)
     {
         return 'images/'.date('Y-m').'/'.uniqid().'.'.$extension;
     }
 
-    public function getExtension($url)
+    /**
+     * fetch file extension from url
+     * 
+     * @return  extension
+     */
+
+    public function getExtension($url, $type = 'file')
     {
         return last(explode(".",basename($url)));
     }
+
+    
 }

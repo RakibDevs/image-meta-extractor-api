@@ -24,19 +24,11 @@ class ImageController extends Controller
     public function index()
     {
         //
+
+        $exif = ($this->imageRepository->store('https://www.exiv2.org/include/img_1771.jpg','url'));
+        dd($exif);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    
 
     /**
      * Store a newly created resource in storage.
@@ -47,7 +39,20 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $exif = ($this->imageRepository->store($request->file('image')));
-        
+
+        return response()->json($exif);
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function url(Request $request)
+    {
+        $exif = ($this->imageRepository->store($request->url,'url'));
 
         return response()->json($exif);
     }
@@ -63,37 +68,5 @@ class ImageController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  
 }
