@@ -70,5 +70,17 @@ class ImageController extends Controller
         );
     }
 
+
+    /**
+     * Download the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function download(Request $request)
+    {
+        return response()->download($request->src);
+    }
+
   
 }

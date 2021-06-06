@@ -20,7 +20,7 @@ class ImageRepository extends ExifRepository
 
     public function get($request)
     {
-        return $this->image->with('meta')->latest()->paginate(10);
+        return $this->image->with('meta')->latest()->paginate(8);
     }
 
 
@@ -46,7 +46,7 @@ class ImageRepository extends ExifRepository
                 $this->exif =  $img->exif();
             }
             // store image to directory
-            $img->save($this->image->src);
+            $img->save(public_path($this->image->src));
             //Storage::put($this->image->src, $img->encode());
 
 
@@ -110,7 +110,7 @@ class ImageRepository extends ExifRepository
 
     public function imagePath($extension)
     {
-        return public_path('images/'.date('Y-m').'/'.uniqid().'.'.$extension);
+        return 'images/'.date('Y-m').'/'.uniqid().'.'.$extension;
     }
 
     /**

@@ -35,6 +35,15 @@ class Image extends Model
         'created_at', 'updated_at'
     ];
 
+    /**
+     * append accessor values
+     *
+     * @var array
+     */
+
+
+    protected $appends = ['image_src'];
+
 
     /**
      * Image with website source
@@ -42,9 +51,9 @@ class Image extends Model
      * @var string
      */
 
-    public function getSrcAttribute($value)
+    public function getImageSrcAttribute($value)
     {
-        return asset($value);
+        return $this->src?asset($this->src):null;
     }
 
 
