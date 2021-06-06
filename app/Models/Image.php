@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\ImageMeta;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -33,6 +34,18 @@ class Image extends Model
     protected $dates = [
         'created_at', 'updated_at'
     ];
+
+
+    /**
+     * Image with website source
+     *
+     * @var string
+     */
+
+    public function getSrcAttribute($value)
+    {
+        return asset($value);
+    }
 
 
     /**
