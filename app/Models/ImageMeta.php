@@ -20,7 +20,40 @@ class ImageMeta extends Model
         'camera',
         'exif'
     ];
+   
+    /**
+     * Author Accessor: Decode JSON value.
+     *
+     * @var string
+     */
 
+    public function getAuthorAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Camera Accessor: Secode JSON value.
+     *
+     * @var string
+     */
+
+    public function getCameraAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+
+    /**
+     * EXIF Accessor: Secode JSON value.
+     *
+     * @var string
+     */
+
+    public function getExifAttribute($value)
+    {
+        return json_decode($value);
+    }
 
 
     /**
