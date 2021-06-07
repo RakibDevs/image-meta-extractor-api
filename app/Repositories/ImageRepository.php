@@ -4,6 +4,8 @@ namespace App\Repositories;
 use App\Models\Image;
 use App\Repositories\ExifRepository;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
+
 use Image as InterventionImage;
 
 class ImageRepository extends ExifRepository
@@ -25,32 +27,31 @@ class ImageRepository extends ExifRepository
 
 
 
-    public function store($file, $type = null)
+    public function store($request)
     {
         try{
 
-            $img  = InterventionImage::make($file);
+            
 
-            if($type == 'url'){
+            if($request->type == 'url'){
                 // get directory with file name from url
-                $this->image->src   = $this->imagePath($this->getExtension($file));
+                $this->image->src   = $this->imagePath($this->getExtension($request->url));
+                $this->image->actual_src   = $request->url;
+                $img  = InterventionImage::make($request->url);
                 // Extract exif information from url
-                $this->exif  = exif_read_data($file);
+                $this->exif  = exif_read_data($request->url);
 
 
 
             }else{
-
+                $file = $request->file('image');
                 $this->image->src   = $this->imagePath($file->getClientOriginalExtension());
+                $img  = InterventionImage::make($file);
                 // Extract exif information from fille
                 $this->exif =  $img->exif();
             }
             // store image to directory
             $img->save(public_path($this->image->src));
-            //Storage::put($this->image->src, $img->encode());
-
-
-            
 
             // store image information
             $this->image->height     = $img->height();
@@ -63,7 +64,7 @@ class ImageRepository extends ExifRepository
                 if($this->exif['SectionsFound'] != ""){
 
                     // process meta data
-                    $this->processMeta();
+                    $this->processMetaData();
 
                     // store image meta
                     $this->image->meta()->create([
@@ -75,11 +76,11 @@ class ImageRepository extends ExifRepository
 
             }
 
-            //return $this->image;
             return $this->image->with('meta')->find($this->image->id);
 
         }catch(\Exception $e){
-            return $e->getMessage();
+
+            return response()->json(['error' => $e->getMessage()]);
 
         }
     }
@@ -88,17 +89,6 @@ class ImageRepository extends ExifRepository
     public function find($id)
     {
         return $this->image->with('meta')->find($id);
-    }
-
-    
-
-
-
-    public function processMeta()
-    {
-        $this->exif = (object)$this->encodeExifToUtf8($this->exif);
-        $this->extractInformation();
-        
     }
 
 

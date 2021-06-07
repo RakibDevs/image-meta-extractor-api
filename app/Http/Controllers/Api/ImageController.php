@@ -40,7 +40,7 @@ class ImageController extends Controller
     {
 
         return response()->json(
-            $this->imageRepository->store($request->file('image'))
+            $this->imageRepository->store($request)
         );
     }
 

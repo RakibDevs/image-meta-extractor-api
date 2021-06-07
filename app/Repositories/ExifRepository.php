@@ -103,8 +103,10 @@ class ExifRepository
     ];
 
 
-    public function extractInformation()
+    public function processMetaData()
     {
+        $this->exif = (object) ($this->encodeExifToUtf8($this->exif));
+
     	// set camera 
         $this->camera = [
         	'Make' 			=> $this->exif->Make??'',
@@ -143,6 +145,7 @@ class ExifRepository
         	'Brightness' 			=> $this->exif->BrightnessValue??'',
         	'Metering Mode' 		=> $this->getMeteringMode($this->exif->MeteringMode??null)
         ];
+
         // calculate latitude
         if(isset($this->exif->GPSLatitude)){
         	$this->exifMeta['Latitude']  = $this->dmsToDegree($this->exif->GPSLatitude);
@@ -187,12 +190,8 @@ class ExifRepository
      */
     protected function dmsToDegree($arr)
 	{
-	    return (int) $arr[0]+((((int) $arr[1]*60)+((int) $arr[2]))/3600);
+	    return round((int) $arr[0]+((((int) $arr[1]*60)+((int) $arr[2]))/3600),2);
 	}
-
-
-    
-
 
     /**
      * to avoid Malformed utf-8 characters, 
