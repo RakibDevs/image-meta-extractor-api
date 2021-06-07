@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageRequest;
 use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
 use Image;
@@ -35,7 +36,7 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ImageRequest $request)
     {
 
         return response()->json(
@@ -43,19 +44,6 @@ class ImageController extends Controller
         );
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function url(Request $request)
-    {
-        return response()->json(
-            $this->imageRepository->store($request->url,'url')
-        );
-    }
 
     /**
      * Display the specified resource.

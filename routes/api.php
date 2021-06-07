@@ -21,5 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::resource('images', ImageController::class);
-Route::post('images/url', [ImageController::class, 'url']);
 Route::get('image/download', [ImageController::class, 'download']);

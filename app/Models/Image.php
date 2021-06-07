@@ -42,7 +42,7 @@ class Image extends Model
      */
 
 
-    protected $appends = ['image_src'];
+    protected $appends = ['image_src','created_ago'];
 
 
     /**
@@ -54,6 +54,17 @@ class Image extends Model
     public function getImageSrcAttribute($value)
     {
         return $this->src?asset($this->src):null;
+    }
+
+    /**
+     * created date in human format
+     *
+     * @var string
+     */
+
+    public function getCreatedAgoAttribute($value)
+    {
+        return $this->created_at->diffForHumans();
     }
 
 
