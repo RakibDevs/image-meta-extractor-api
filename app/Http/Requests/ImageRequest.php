@@ -17,6 +17,16 @@ class ImageRequest extends FormRequest
         return true;
     }
 
+
+    public function response(array $errors)
+    {
+        $err = ['errors' => 'Processing failed!',
+                'message' => 'hi'];
+        return [
+            'error' => $err
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -32,8 +42,5 @@ class ImageRequest extends FormRequest
     }
 
 
-    public function response(array $errors)
-    {
-        return JsonResponse(['error' => $errors], 400);
-    }
+    
 }

@@ -22,7 +22,7 @@ class ImageRepository extends ExifRepository
 
     public function get($request)
     {
-        return $this->image->with('meta')->latest()->paginate(8);
+        return $this->image->with('meta')->latest()->paginate(9);
     }
 
 
@@ -30,8 +30,6 @@ class ImageRepository extends ExifRepository
     public function store($request)
     {
         try{
-
-            
 
             if($request->type == 'url'){
                 // get directory with file name from url
@@ -80,7 +78,10 @@ class ImageRepository extends ExifRepository
 
         }catch(\Exception $e){
 
-            return response()->json(['error' => $e->getMessage()]);
+            return [
+                'errors' => 'Processing failed!',
+                'message' => $e->getMessage()
+            ];
 
         }
     }
