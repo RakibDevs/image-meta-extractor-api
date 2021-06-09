@@ -1,10 +1,11 @@
-# Image Meta Extractor API [IMGEXIF]
-Extract [EXIF](https://exiftool.org/TagNames/EXIF.html) information from an image or url. EXIF is sometimes called metadata, is a collection of information that is stored by the camera at the moment you take a photo.
+## Image Meta Extractor API [IMGEXIF]
+Extract [EXIF](https://exiftool.org/TagNames/EXIF.html) information from an image or url. 
+EXIF is sometimes called metadata, is a collection of information that is stored by the camera at the moment you take a photo.
 
-## API Documentation
+### API Documentation
 Get Postman API documentation [here](https://documenter.getpostman.com/view/11223504/TzY7dYrZ)
 
-## Initial Setup
+### Initial Setup
 Run this commands -
 ```
 git clone https://github.com/rakibdevs/image-meta-extractor-api.git
@@ -22,3 +23,4 @@ Now serve
 ```
 php artisan serve
 ```
+See [this vue.js repository](https://github.com/RakibDevs/vue-image-meta) to connect this API. 
