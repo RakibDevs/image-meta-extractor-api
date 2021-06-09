@@ -7,21 +7,26 @@ Get Postman API documentation [here](https://documenter.getpostman.com/view/1122
 
 ### Initial Setup
 Run this commands -
-```
+```bash
 git clone https://github.com/rakibdevs/image-meta-extractor-api.git
 cd image-meta-extractor-api
 cp .env.example .env
 ```
 Create a database and update `.env` with database credentials
-```
+```bash
 composer update
 php artisan key:generate
 php artisan migrate
 ```
 
 Now serve 
-```
+```bash
 php artisan serve
+```
+
+Run tests
+```bash
+php artisan test
 ```
 See [this vue.js repository](https://github.com/RakibDevs/vue-image-meta) to connect this API. 
 
