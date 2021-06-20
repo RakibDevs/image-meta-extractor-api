@@ -41,7 +41,7 @@ class ExifRepository
 		5 => 'Mirror Horizontal and Rotate 270 CW',
 		6 => 'Rotate 90 CW',
 		7 => 'Mirror Horizontal and Rotate 90 CW',
-		8 => 'Rotate 270 CW',
+		8 => 'Rotate 270 CW'
     ];
 
     /**
@@ -99,7 +99,7 @@ class ExifRepository
 		4 => 'Multi-spot',
 		5 => 'Multi-segment',
 		6 => 'Partial',
-		255 => 'Other',
+		255 => 'Other'
     ];
 
 
@@ -107,54 +107,107 @@ class ExifRepository
     {
         $this->exif = (object) ($this->encodeExifToUtf8($this->exif));
 
-    	// set camera 
-        $this->camera = [
-        	'Make' 			=> $this->exif->Make??'',
-        	'Model' 		=> $this->exif->Model??'',
-        	'Exposure' 		=> $this->exif->ExposureTime??'',
-        	'Aperture' 		=> $this->exif->ApertureValue??'',
-        	'Focal Length' 	=> $this->exif->FocalLength??'',
-        	'Focal Length (35mm)' 	=> $this->exif->FocalLengthIn35mmFilm??'',
-        	'ISO Speed' 	=> $this->exif->ISOSpeedRatings??'',
-        	'Shutter Speed' => $this->exif->ShutterSpeedValue??''
-        ];
-        if(isset($this->exif->GPSLatitude)){
-    		$this->camera['Flash'] 	= $this->exif->Flash == 1?'Flash':'No Flash';
-    	}
+        if($this->exif){
+            $this->extractCameraInformation();
+            $this->extractAuthorInformation();
+            $this->extractExifInformation();
+        }
+    }
 
-    
+    protected function extractCameraInformation()
+    {
+        // set camera 
+        if(isset($this->exif->Make)){
+            $this->camera['Make'] = $this->exif->Make;
+        }
+        if(isset($this->exif->Model)){
+            $this->camera['Model'] = $this->exif->Model;
+        }
+        if(isset($this->exif->ExposureTime)){
+            $this->camera['Exposure'] = $this->exif->ExposureTime;
+        }
+        if(isset($this->exif->ApertureValue)){
+            $this->camera['Aperture'] = $this->exif->ApertureValue;
+        }
+        if(isset($this->exif->FocalLength)){
+            $this->camera['Focal Length'] = $this->exif->FocalLength;
+        }
+        if(isset($this->exif->Make)){
+            $this->camera['Focal Length (35mm)'] = $this->exif->FocalLengthIn35mmFilm;
+        }
+        if(isset($this->exif->Make)){
+            $this->camera['ISO Speed'] = $this->exif->ISOSpeedRatings;
+        }
+        if(isset($this->exif->Make)){
+            $this->camera['Shutter Speed'] = $this->exif->ShutterSpeedValue;
+        }
+        if(isset($this->exif->Make)){
+            $this->camera['Make'] = $this->exif->Make;
+        }
+        
+        if(isset($this->exif->Flash)){
+            $this->camera['Flash']  = $this->exif->Flash == 1?'Flash':'No Flash';
+        }
+    }
+
+    protected function extractAuthorInformation()
+    {
         $this->author = [
-        	'Author' => $this->exif->Author??'',
-        	'Copyright' => $this->exif->Copyright??''
+            'Author' => $this->exif->Author??'',
+            'Copyright' => $this->exif->Copyright??''
         ];
-    
-    	
-        $this->exifMeta = [
-        	'Image Unique ID' 	    => $this->exif->ImageUniqueID??'',
-        	'Orientation' 			=> $this->getOrientation($this->exif->Orientation??null),
-        	'Horizontal Resolution' => $this->exif->XResolution??'' ,
-        	'Vertical Resolution' 	=> $this->exif->YResolution??'',
-        	'Resolution Unit' 		=> $this->getResoulutionUnit($this->exif->ResolutionUnit??null),
-        	'Software' 				=> $this->exif->Software??'',
-        	'Modify Date' 			=> $this->exif->DateTime??'',
-        	'YCbCr Positioning'     => $this->getYCbCrPositioning($this->exif->YCbCrPositioning??null),
-        	'FNumber' 				=> $this->exif->FNumber??'',
-        	'Exposure Program' 		=> $this->getExposureProgram($this->exif->ExposureProgram??null),
-        	'Original Date' 		=> $this->exif->DateTimeOriginal??'',
-        	'Created Date' 			=> $this->exif->DateTimeDigitized??'',
-        	'Brightness' 			=> $this->exif->BrightnessValue??'',
-        	'Metering Mode' 		=> $this->getMeteringMode($this->exif->MeteringMode??null)
-        ];
+    }
+
+    protected function extractExifInformation()
+    {
+        if(isset($this->exif->ImageUniqueID)){
+            $this->exifMeta['Image Unique ID'] = $this->exif->ImageUniqueID;
+        }
+        if(isset($this->exif->Orientation)){
+            $this->exifMeta['Orientation'] = $this->getOrientation($this->exif->Orientation);
+        }
+        if(isset($this->exif->XResolution)){
+            $this->exifMeta['Horizontal Resolution'] = $this->exif->XResolution;
+        }
+        if(isset($this->exif->YResolution)){
+            $this->exifMeta['Vertical Resolution'] = $this->exif->YResolution;
+        }
+        if(isset($this->exif->ResolutionUnit)){
+            $this->exifMeta['Resolution Unit'] = $this->getResoulutionUnit($this->exif->ResolutionUnit);
+        }
+        if(isset($this->exif->Software)){
+            $this->exifMeta['Software'] = $this->exif->Software;
+        }
+        if(isset($this->exif->DateTime)){
+            $this->exifMeta['Modify Date'] = $this->exif->DateTime;
+        }
+        if(isset($this->exif->YCbCrPositioning)){
+            $this->exifMeta['YCbCr Positioning'] = $this->getYCbCrPositioning($this->exif->YCbCrPositioning);
+        }
+        if(isset($this->exif->FNumber)){
+            $this->exifMeta['FNumber'] = $this->exif->FNumber;
+        }
+        if(isset($this->exif->ExposureProgram)){
+            $this->exifMeta['Exposure Program'] = $this->getExposureProgram($this->exif->ExposureProgram);
+        }
+        if(isset($this->exif->DateTimeOriginal)){
+            $this->exifMeta['Original Date'] = $this->exif->DateTimeOriginal;
+        }
+        if(isset($this->exif->DateTimeDigitized)){
+            $this->exifMeta['Created Date'] = $this->exif->DateTimeDigitized;
+        }
+        if(isset($this->exif->MeteringMode)){
+            $this->exifMeta['Metering Mode'] = $this->getMeteringMode($this->exif->MeteringMode);
+        }
 
         // calculate latitude
         if(isset($this->exif->GPSLatitude)){
-        	$this->exifMeta['Latitude']  = $this->dmsToDegree($this->exif->GPSLatitude);
+            $this->exifMeta['Latitude']  = $this->dmsToDegree($this->exif->GPSLatitude);
         }
         // calculate longitude
         if(isset($this->exif->GPSLongitude)){
-        	$this->exifMeta['Longitude'] = $this->dmsToDegree($this->exif->GPSLongitude);
+            $this->exifMeta['Longitude'] = $this->dmsToDegree($this->exif->GPSLongitude);
         }
-
     }
 
     protected function getOrientation($value)
