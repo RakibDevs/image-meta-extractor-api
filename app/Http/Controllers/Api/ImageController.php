@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageRequest;
 use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
-use Image;
 
 class ImageController extends Controller
 {
-
     public $imageRepository;
 
     public function __construct(ImageRepository $imageRepository)
@@ -38,7 +36,6 @@ class ImageController extends Controller
      */
     public function store(ImageRequest $request)
     {
-
         return response()->json(
             $this->imageRepository->store($request)
         );
@@ -69,6 +66,4 @@ class ImageController extends Controller
     {
         return response()->download($request->src);
     }
-
-  
 }

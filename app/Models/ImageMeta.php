@@ -18,7 +18,7 @@ class ImageMeta extends Model
         'image_id',
         'author',
         'camera',
-        'exif'
+        'exif',
     ];
    
     /**

@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\ImageMeta;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -22,7 +20,7 @@ class Image extends Model
         'actual_src',
         'height',
         'width',
-        'mime_type'
+        'mime_type',
     ];
 
 
@@ -32,7 +30,7 @@ class Image extends Model
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at',
     ];
 
     /**
@@ -75,8 +73,6 @@ class Image extends Model
      */
     public function meta()
     {
-        return $this->hasOne(ImageMeta::class,'image_id','id');
+        return $this->hasOne(ImageMeta::class, 'image_id', 'id');
     }
-
-
 }

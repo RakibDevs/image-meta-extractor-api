@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\JsonResponse;
 
 class ImageRequest extends FormRequest
 {
@@ -21,9 +20,10 @@ class ImageRequest extends FormRequest
     public function response(array $errors)
     {
         $err = ['errors' => 'Processing failed!',
-                'message' => 'hi'];
+                'message' => 'hi', ];
+
         return [
-            'error' => $err
+            'error' => $err,
         ];
     }
 
@@ -35,12 +35,9 @@ class ImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'type'      => 'required|string|in:image,url',   // type must be 'image' or 'url'
-            'image'     => 'required_if:type,image|mimes:jpg,jpeg,png|max:4096', 
-            'url'       => 'required_if:type,url|url'
+            'type' => 'required|string|in:image,url',   // type must be 'image' or 'url'
+            'image' => 'required_if:type,image|mimes:jpg,jpeg,png|max:4096',
+            'url' => 'required_if:type,url|url',
         ];
     }
-
-
-    
 }

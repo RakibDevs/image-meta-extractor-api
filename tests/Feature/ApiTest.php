@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -38,9 +37,8 @@ class ApiTest extends TestCase
      * @return void
      */
 
-    public function test_get_images_response_in_valid_format() 
+    public function test_get_images_response_in_valid_format()
     {
-    
         $this->json('get', 'api/images')
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
@@ -57,15 +55,15 @@ class ApiTest extends TestCase
                         'created_at',
                         'updated_at',
                         'image_src',
-                        'meta'
-                    ]
+                        'meta',
+                    ],
                 ],
                 'first_page_url',
                 'from',
                 'last_page',
                 'last_page_url',
                 'links',
-                'next_page_url'
+                'next_page_url',
             ]);
     }
 
@@ -76,9 +74,8 @@ class ApiTest extends TestCase
      * @return void
      */
 
-    public function test_get_an_images_response_in_valid_format() 
+    public function test_get_an_images_response_in_valid_format()
     {
-    
         $this->json('get', 'api/images/1')
             ->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
@@ -92,7 +89,7 @@ class ApiTest extends TestCase
                 'created_at',
                 'updated_at',
                 'image_src',
-                'meta'
+                'meta',
             ]);
     }
 }
